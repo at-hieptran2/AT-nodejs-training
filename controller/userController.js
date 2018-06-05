@@ -31,6 +31,7 @@ exports.removeUser = function(req, res) {
    res.send(callback);
   });
 }
+
 exports.insertUser = function(req, res) {
   userModel.insertUser(req.body, function(err, callback) {
     if(err) throw err;
