@@ -1,5 +1,18 @@
-var groupModel = require('../models/group');
+var group = require('../model/group');
 
-exports.insertGroup = function(req, res) {
-  groupModel.insertGroup(req.body, res);
+exports.getListGroup = function(req, res) {
+  //call function from group model
+  group.showAllGroup(res);
+};
+
+exports.addGroup = function(req, res) {
+  group.createGroup(req.body, res);
+};
+
+exports.deleteGroup = function(req, res) {
+  group.deleteGroupId(req, res);
+}
+
+exports.updateGroup = function(req, res) {
+  group.updateGroup(req, res);
 }

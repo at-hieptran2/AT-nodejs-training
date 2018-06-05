@@ -1,39 +1,63 @@
-var userModel = require('../models/user');
+var User = require('../model/user');
+var createUserSchema = require('../validation/user-validation');
+var joi = require('../validation/user-validation');
 
-exports.index =  function() {
-  console.log('controller runs!');
-}
-
-exports.getUser = function(req, res) {
-  userModel.getUser(req.params.id, function(err, callback) {
-    if(err) throw err;
-    res.send(callback);
+exports.getList = function(err, res) {
+  console.log(123);
+  //call function from user model
+  User.showAllUser(function(err, List) {
+    if (List) {
+      res.render('layout', { List });
+    } else {
+      res.send('Error :' + err);
+    }
   });
-}
+};
 
-exports.findUser = function(req, res) {
-  userModel.findUserNameAndPhone(req.params.name, req.params.phone, function(err, callback) {
-    if(err) throw err;
-      res.send(callback);
+exports.addUser = function(req, res) {
+  createUserSchema.validate(req.body, {abortEarly: false}) //abortEarly - collect all errors not just the first one
+  .then(validatedUser => {
+    res.status(200).send(`user ${JSON.stringify(validatedUser)} created`);
+  })
+  .catch(validationError => {
+    const errorMessage = validationError.details.map(d => d.message);
+    res.status(400).send(errorMessage);
   });
-}
+};
 
 exports.updateUser = function(req, res) {
-  userModel.updateUser(req.params.id, req.body, function(err, callback) {
-    if(err) throw err;
-    res.send(callback);
-  });
-}
+  User.updateUser(req, function(err, result) {
+    if (result) {
+      res.send('Update sucess');
+    } else {
+      res.send('not found');
+    }
+ });
+};
 
-exports.removeUser = function(req, res) {
-  userModel.removeUser(req.params.id, function(err, callback) {
-    if(err) throw err;
-   res.send(callback);
+exports.getUser = function(req, res) {
+  User.getUser(req, function(err, result) {
+    if (result) {
+      res.send(result);
+    } else {
+      res.send('not found!');
+    }
   });
-}
-exports.insertUser = function(req, res) {
-  userModel.insertUser(req.body, function(err, callback) {
-    if(err) throw err;
-    res.send(callback);
+};
+
+exports.deleteUserId = function(req, res) {
+  User.deleteUserId(req.params.id, function(err, result) {
+    if(!result) {
+      res.send('Not found!');
+    } else {
+      res.send(result);
+    }
   });
-}
+  
+};
+
+exports.findtUserByNameAndPhone = function(req, res) {
+  User.findtUserByNameAndPhone(req, function(err, result) {
+    res.send(result);
+  });
+};
