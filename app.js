@@ -4,8 +4,21 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var mongoose = require('mongoose');
+// var mongodb = require('mongodb');
+var url = "mongodb://localhost:27017/mydb";
+mongoose.connect(url);
+// Get Mongoose to use the global promise library
+mongoose.Promise = global.Promise;
+//Get the default connection
+var db = mongoose.connection;
+
+//Bind connection to error event (to get notification of connection errors)
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var groupsRouter = require('./routes/groups');
 
 var app = express();
 
@@ -21,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/groups', groupsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -38,4 +52,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+var url = 'mongodb://localhost:27017/testdb';
+var mongoose = require('mongoose');
+mongoose.connect(url);
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection failed!'));
 module.exports = app;
