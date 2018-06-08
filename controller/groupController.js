@@ -1,4 +1,4 @@
-var group = require('../model/group');
+var group = require('../models/group');
 
 exports.getListGroup = function(req, res) {
   //call function from group model

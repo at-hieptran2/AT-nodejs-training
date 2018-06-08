@@ -1,10 +1,8 @@
-var User = require('../model/user');
-var createUserSchema = require('../validation/user-validation');
-var joi = require('../validation/user-validation');
+var User = require('../models/user');
+var createUserSchema = require('../lib/validation/UserValidations');
+var joi = require('../lib/validation/UserValidations');
 
 exports.getList = function(err, res) {
-  console.log(123);
-  //call function from user model
   User.showAllUser(function(err, List) {
     if (List) {
       res.render('layout', { List });

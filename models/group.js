@@ -35,7 +35,6 @@ module.exports.showAllGroup = function(res) {
 }
 
 module.exports.updateGroup = function(req, res) {
-  // Group.findByIdAndUpdate(req._id, req, function(result) {
   Group.findByIdAndUpdate({_id: req.params.id}, req.body, function(err, result) {
     if (result) {
       res.send('Update sucess');
